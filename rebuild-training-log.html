@@ -1,0 +1,859 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>REBUILD — Training Log</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="REBUILD">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1b1d1e">
+<link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAIAAACyr5FlAAACWklEQVR4nO3cPU4bURhAUU9E4yUgRBSFxhJKOlIkXVhMlBUBm6GkcWeCxAYgS6Clpci1iW2NLTinHVvvaXT1FfM3HB1/nMC/fNj1Bthf4iCJgyQOkjhI4iCJgyQOkjhI4iCJgyQOkjhI4iCJgyQOkjhI4iCJgyQOkjhI4iAdDMOw6z2wp0wOkjhI4iCJgyQOkjhI4iCJgyQOkjhI4iCJgyQOkjhI4iCJgyQOkjhI4iCJgyQOkqfPSSYHSRwkcZDEQRIHSRwkcZDEQRIHSRwkcZDEQRIHSRwkcZDEQTrY5M93V39f/+PTX4ebrMVL45x5k4MkDpI4SOIgiYM03qsJ3oHYlbXPvMlBEgdJHKQVV0jnN9dLjj5NJtPFbKv7Ycuevt7Pb5b94Oz7zzpkcpDEQRIHSRwkcZDEQRIHSRwkcZDEQRIHaaOnz//Ln8vH0dZiK0wOkjhI4iCJgyQOkg/jv3dLAjA5SOIgiYMkDpI4SOIgjXfj7cvvo9HWevNuLx5GWMXkIImDJA6SOEjiIImDJA6SOEjiIImDJA7Sinsr336cLzk6zhV+NjFdzNa+q2VykMRBEgfJh/HfPh/GZ/vEQRIHSRwkcZCGT59Pdr0H9pTJQRIHSRwkcZDEQRIHSRwkcZDEQRIHSRwkcZDEQRIHSRwkH8YnmRwkcZDEQRIHSRwkcZDEQRIHSRwkcZDEQRIHSRwkcZDEQRIHSRwkcZDEQRIHSRwkcZC8mkAyOUjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjiIImDJA6SOEjPyEMa7/Olo1sAAAAASUVORK5CYII=">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #1b1d1e;
+    --panel: #242728;
+    --panel-raised: #2c2f30;
+    --line: #3a3d3e;
+    --text: #e9e6df;
+    --text-dim: #9a9d9c;
+    --accent: #f2b807;
+    --accent-dim: #7a6104;
+    --good: #4ade80;
+    --bad: #f87171;
+    --steel: #6b7480;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse at top left, #232525 0%, var(--bg) 55%);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    padding:env(safe-area-inset-top) 0 calc(60px + env(safe-area-inset-bottom)) 0;
+    min-height:100vh;
+  }
+  .rivet-bar{
+    height:6px;
+    background:repeating-linear-gradient(90deg, var(--accent) 0 18px, var(--panel) 18px 36px);
+    opacity:0.85;
+  }
+  header{
+    padding:28px 20px 20px;
+    border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg, #202223, #1b1d1e);
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:0.18em;
+    color:var(--accent);
+    text-transform:uppercase;
+    margin-bottom:6px;
+  }
+  h1{
+    font-family:'Oswald',sans-serif;
+    font-weight:700;
+    font-size:34px;
+    letter-spacing:0.02em;
+    margin:0 0 4px 0;
+    text-transform:uppercase;
+  }
+  .subhead{
+    color:var(--text-dim);
+    font-size:14px;
+    max-width:520px;
+    line-height:1.5;
+  }
+  main{max-width:640px;margin:0 auto;padding:24px 16px;}
+  .section-label{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    letter-spacing:0.14em;
+    text-transform:uppercase;
+    color:var(--steel);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin:32px 0 14px;
+  }
+  .section-label::after{
+    content:'';
+    flex:1;
+    height:1px;
+    background:var(--line);
+  }
+  .day-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-left:4px solid var(--steel);
+    border-radius:4px;
+    padding:16px 16px 14px;
+    margin-bottom:12px;
+    transition:border-color .2s;
+  }
+  .day-card.done{border-left-color:var(--good);}
+  .day-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:10px;
+    margin-bottom:10px;
+  }
+  .day-title{
+    font-family:'Oswald',sans-serif;
+    font-size:18px;
+    text-transform:uppercase;
+    letter-spacing:0.01em;
+  }
+  .day-sub{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:var(--text-dim);
+    margin-top:2px;
+  }
+  .check-toggle{
+    width:26px;height:26px;
+    border:2px solid var(--steel);
+    border-radius:4px;
+    background:transparent;
+    cursor:pointer;
+    flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    color:transparent;
+    font-size:16px;
+    transition:all .15s;
+  }
+  .check-toggle.on{
+    background:var(--good);
+    border-color:var(--good);
+    color:#10261a;
+  }
+  .field-row{
+    display:grid;
+    grid-template-columns:1fr 80px;
+    gap:8px;
+    margin-bottom:10px;
+    align-items:center;
+  }
+  .field-row label{
+    font-size:13px;
+    color:var(--text);
+    display:block;
+  }
+  .plan-text{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:var(--text-dim);
+    margin-top:2px;
+  }
+  .field-row input{
+    font-family:'IBM Plex Mono',monospace;
+    background:var(--bg);
+    border:1px solid var(--line);
+    color:var(--text);
+    border-radius:3px;
+    padding:6px 8px;
+    font-size:13px;
+    width:100%;
+  }
+  .field-row input:focus{outline:none;border-color:var(--accent);}
+  .cardio-block{
+    margin-top:12px;
+    padding-top:10px;
+    border-top:1px dashed var(--line);
+  }
+  .cardio-title{
+    font-size:13px;
+    color:var(--text);
+    margin-bottom:6px;
+    font-weight:500;
+  }
+  .cardio-inputs{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+  }
+  .cardio-inputs.three-col{
+    grid-template-columns:1fr 1fr 1fr;
+  }
+  .cardio-inputs select,
+  .cardio-inputs input{
+    font-family:'IBM Plex Mono',monospace;
+    background:var(--bg);
+    border:1px solid var(--line);
+    color:var(--text);
+    border-radius:3px;
+    padding:7px 8px;
+    font-size:12px;
+    width:100%;
+  }
+  .cardio-inputs select:focus,
+  .cardio-inputs input:focus{outline:none;border-color:var(--accent);}
+  .cardio-inputs select{
+    appearance:none;
+    -webkit-appearance:none;
+    background-image:url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3e%3cpath fill='%239a9d9c' d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+    background-repeat:no-repeat;
+    background-position:right 6px center;
+    background-size:16px;
+    padding-right:24px;
+  }
+  .pace-readout{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    color:var(--accent);
+    margin-top:6px;
+    min-height:14px;
+  }
+  .coach-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-left:4px solid var(--accent);
+    border-radius:4px;
+    padding:14px 16px;
+  }
+  .coach-line{
+    padding:10px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .coach-line:last-child{border-bottom:none;}
+  .coach-label{
+    display:block;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    color:var(--steel);
+    margin-bottom:3px;
+  }
+  .coach-text{
+    display:block;
+    font-size:13px;
+    color:var(--text);
+    line-height:1.4;
+  }
+  .checkin-card{
+    background:var(--panel-raised);
+    border:1px solid var(--accent-dim);
+    border-radius:6px;
+    padding:18px 16px;
+    position:relative;
+    overflow:hidden;
+  }
+  .checkin-card::before{
+    content:'';
+    position:absolute;
+    top:0;left:0;right:0;
+    height:3px;
+    background:var(--accent);
+  }
+  .checkin-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin:14px 0;
+  }
+  .checkin-field label{
+    display:block;
+    font-size:11px;
+    font-family:'IBM Plex Mono',monospace;
+    color:var(--text-dim);
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    margin-bottom:4px;
+  }
+  .checkin-field input{
+    width:100%;
+    background:var(--bg);
+    border:1px solid var(--line);
+    color:var(--accent);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:16px;
+    font-weight:600;
+    border-radius:4px;
+    padding:8px;
+  }
+  .checkin-field input:focus{outline:none;border-color:var(--accent);}
+  textarea{
+    width:100%;
+    background:var(--bg);
+    border:1px solid var(--line);
+    color:var(--text);
+    border-radius:4px;
+    padding:8px;
+    font-family:'Inter',sans-serif;
+    font-size:13px;
+    resize:vertical;
+    min-height:44px;
+  }
+  .btn{
+    font-family:'Oswald',sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    font-size:14px;
+    font-weight:600;
+    padding:11px 18px;
+    border-radius:4px;
+    border:none;
+    cursor:pointer;
+    transition:transform .1s, filter .15s;
+  }
+  .btn:active{transform:scale(0.98);}
+  .btn-primary{background:var(--accent);color:#241c02;width:100%;margin-top:6px;}
+  .btn-primary:hover{filter:brightness(1.08);}
+  .btn-ghost{
+    background:transparent;
+    border:1px solid var(--line);
+    color:var(--text-dim);
+    font-size:12px;
+    padding:8px 12px;
+  }
+  .btn-ghost:hover{border-color:var(--steel);color:var(--text);}
+  .gauge-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:12px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .gauge-row:last-child{border-bottom:none;}
+  .gauge-label{font-size:13px;color:var(--text-dim);}
+  .gauge-date{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--steel);}
+  .history-entry{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:6px;
+    padding:14px 16px;
+    margin-bottom:10px;
+  }
+  .history-top{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:10px;
+  }
+  .history-metrics{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:8px 16px;
+  }
+  .metric{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:13px;
+    display:flex;
+    justify-content:space-between;
+  }
+  .metric .val{font-weight:600;}
+  .delta{font-size:11px;margin-left:6px;}
+  .delta.up{color:var(--good);}
+  .delta.down{color:var(--bad);}
+  .empty-state{
+    text-align:center;
+    padding:30px 16px;
+    color:var(--text-dim);
+    font-size:13px;
+    border:1px dashed var(--line);
+    border-radius:6px;
+  }
+  .toast{
+    position:fixed;
+    bottom:20px;left:50%;
+    transform:translateX(-50%) translateY(0);
+    background:var(--accent);
+    color:#241c02;
+    padding:10px 18px;
+    border-radius:5px;
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12px;
+    font-weight:600;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .25s, transform .25s;
+    z-index:50;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(-6px);}
+  .footer-note{
+    text-align:center;
+    color:var(--steel);
+    font-family:'IBM Plex Mono',monospace;
+    font-size:11px;
+    margin-top:36px;
+    letter-spacing:0.04em;
+  }
+</style>
+</head>
+<body>
+  <div class="rivet-bar"></div>
+  <header>
+    <div class="eyebrow">Return-to-training log</div>
+    <h1>Rebuild</h1>
+    <div class="subhead">4 sessions a week — strength on the rack, 2 runs, 2 bikes. Log your working weights and cardio as you go, then hit the monthly check-in to see the trend.</div>
+  </header>
+
+  <main>
+    <div class="section-label">This week</div>
+    <button class="btn-ghost" id="resetWeekBtn" style="margin-bottom:14px;">Start new week (clear entries)</button>
+
+    <div class="day-card" data-day="day1">
+      <div class="day-head">
+        <div>
+          <div class="day-title">Monday — Barbell + Run</div>
+          <div class="day-sub">Squat · Bench · Row · easy run</div>
+        </div>
+        <button class="check-toggle" data-toggle="day1">✓</button>
+      </div>
+      <div class="field-row">
+        <div><label>Back squat</label><div class="plan-text">3 sets × 8 reps</div></div>
+        <input type="text" data-field="day1_squat" placeholder="lb">
+      </div>
+      <div class="field-row">
+        <div><label>Bench press</label><div class="plan-text">3 sets × 8 reps</div></div>
+        <input type="text" data-field="day1_bench" placeholder="lb">
+      </div>
+      <div class="field-row">
+        <div><label>Barbell row</label><div class="plan-text">3 sets × 8 reps</div></div>
+        <input type="text" data-field="day1_row" placeholder="lb">
+      </div>
+      <div class="cardio-block">
+        <div class="cardio-title">Run</div>
+        <div class="plan-text" style="margin-bottom:8px;">Easy · 20-25 min · conversational pace</div>
+        <div class="cardio-inputs three-col">
+          <select data-field="day1_run_type">
+            <option value="">Type</option>
+            <option value="easy" selected>Easy</option>
+            <option value="tempo">Tempo</option>
+            <option value="hills">Hill repeats</option>
+            <option value="intervals">Intervals</option>
+          </select>
+          <input type="text" data-field="day1_run_duration" placeholder="Duration (min)">
+          <input type="text" data-field="day1_run_distance" placeholder="Distance (mi)">
+        </div>
+        <div class="pace-readout" id="pace_day1_run"></div>
+      </div>
+    </div>
+
+    <div class="day-card" data-day="day2">
+      <div class="day-head">
+        <div>
+          <div class="day-title">Wednesday — Barbell + Bike</div>
+          <div class="day-sub">Deadlift · OHP · Pull-ups · bike</div>
+        </div>
+        <button class="check-toggle" data-toggle="day2">✓</button>
+      </div>
+      <div class="field-row">
+        <div><label>Deadlift</label><div class="plan-text">3 sets × 6-8 reps</div></div>
+        <input type="text" data-field="day2_deadlift" placeholder="lb">
+      </div>
+      <div class="field-row">
+        <div><label>Overhead press</label><div class="plan-text">3 sets × 8 reps</div></div>
+        <input type="text" data-field="day2_ohp" placeholder="lb">
+      </div>
+      <div class="field-row">
+        <div><label>Pull-ups / lat pulldown</label><div class="plan-text">3 sets × 8-10 reps</div></div>
+        <input type="text" data-field="day2_pull" placeholder="reps or lb">
+      </div>
+      <div class="cardio-block">
+        <div class="cardio-title">Bike</div>
+        <div class="plan-text" style="margin-bottom:8px;">Easy spin · 30 min · low resistance, high cadence</div>
+        <div class="cardio-inputs three-col">
+          <select data-field="day2_bike_type">
+            <option value="">Type</option>
+            <option value="easy" selected>Easy spin</option>
+            <option value="steady">Steady</option>
+            <option value="hills">Hills</option>
+            <option value="intervals">Intervals</option>
+          </select>
+          <input type="text" data-field="day2_bike_duration" placeholder="Duration (min)">
+          <input type="text" data-field="day2_bike_distance" placeholder="Distance (mi)">
+        </div>
+        <div class="pace-readout" id="pace_day2_bike"></div>
+      </div>
+    </div>
+
+    <div class="day-card" data-day="day4">
+      <div class="day-head">
+        <div>
+          <div class="day-title">Friday — Dumbbell + Bike</div>
+          <div class="day-sub">Split squat · DB bench · DB row · bike</div>
+        </div>
+        <button class="check-toggle" data-toggle="day4">✓</button>
+      </div>
+      <div class="field-row">
+        <div><label>DB split squat</label><div class="plan-text">3 sets × 10 reps/leg</div></div>
+        <input type="text" data-field="day4_splitsquat" placeholder="lb each">
+      </div>
+      <div class="field-row">
+        <div><label>DB bench / floor press</label><div class="plan-text">3 sets × 10 reps</div></div>
+        <input type="text" data-field="day4_dbbench" placeholder="lb each">
+      </div>
+      <div class="field-row">
+        <div><label>DB row</label><div class="plan-text">3 sets × 10 reps/arm</div></div>
+        <input type="text" data-field="day4_dbrow" placeholder="lb each">
+      </div>
+      <div class="cardio-block">
+        <div class="cardio-title">Bike</div>
+        <div class="plan-text" style="margin-bottom:8px;">Steady · 30-40 min · comfortably hard</div>
+        <div class="cardio-inputs three-col">
+          <select data-field="day4_bike_type">
+            <option value="">Type</option>
+            <option value="easy">Easy spin</option>
+            <option value="steady" selected>Steady</option>
+            <option value="hills">Hills</option>
+            <option value="intervals">Intervals</option>
+          </select>
+          <input type="text" data-field="day4_bike_duration" placeholder="Duration (min)">
+          <input type="text" data-field="day4_bike_distance" placeholder="Distance (mi)">
+        </div>
+        <div class="pace-readout" id="pace_day4_bike"></div>
+      </div>
+    </div>
+
+    <div class="day-card" data-day="day3">
+      <div class="day-head">
+        <div>
+          <div class="day-title">Sunday — Long Run</div>
+          <div class="day-sub">No lifting — swap for the monthly check-in when it's due</div>
+        </div>
+        <button class="check-toggle" data-toggle="day3">✓</button>
+      </div>
+      <div class="cardio-block" style="margin-top:0;padding-top:0;border-top:none;">
+        <div class="cardio-title">Run</div>
+        <div class="plan-text" style="margin-bottom:8px;">Easy long · start 35 min, +5 min/week to 50 min, then hold</div>
+        <div class="cardio-inputs three-col">
+          <select data-field="day3_run_type">
+            <option value="">Type</option>
+            <option value="easy" selected>Easy long</option>
+            <option value="steady">Steady long</option>
+            <option value="progressive">Progressive (fast finish)</option>
+          </select>
+          <input type="text" data-field="day3_run_duration" placeholder="Duration (min)">
+          <input type="text" data-field="day3_run_distance" placeholder="Distance (mi)">
+        </div>
+        <div class="pace-readout" id="pace_day3_run"></div>
+      </div>
+    </div>
+
+    <div class="section-label">Coach</div>
+    <div class="coach-card">
+      <div class="day-sub" style="margin-bottom:10px;">Compares what you log this week against your last completed week</div>
+      <div id="coachList"></div>
+    </div>
+
+    <div class="section-label">Monthly check-in</div>
+    <div class="checkin-card">
+      <div class="day-sub" style="margin-bottom:2px;">Do this once a month, in place of a Sunday long run</div>
+      <div class="checkin-grid">
+        <div class="checkin-field"><label>5K time (min)</label><input type="text" id="ci_5k" placeholder="e.g. 27:40"></div>
+        <div class="checkin-field"><label>Squat 5RM (lb)</label><input type="text" id="ci_squat" placeholder="e.g. 185"></div>
+        <div class="checkin-field"><label>Bench 5RM (lb)</label><input type="text" id="ci_bench" placeholder="e.g. 135"></div>
+        <div class="checkin-field"><label>Push-ups / 60s</label><input type="text" id="ci_pushups" placeholder="e.g. 28"></div>
+        <div class="checkin-field"><label>Resting HR</label><input type="text" id="ci_hr" placeholder="e.g. 58"></div>
+      </div>
+      <label style="font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--text-dim);text-transform:uppercase;letter-spacing:0.04em;display:block;margin-bottom:4px;">Notes</label>
+      <textarea id="ci_notes" placeholder="Soreness, energy, anything worth remembering"></textarea>
+      <button class="btn btn-primary" id="saveCheckin">Log this month's check-in</button>
+    </div>
+
+    <div class="section-label">Progress history</div>
+    <div id="historyList"></div>
+  </main>
+
+  <div class="footer-note">REBUILD · logged locally to your account</div>
+  <div class="toast" id="toast"></div>
+
+<script>
+const fields = document.querySelectorAll('[data-field]');
+const toggles = document.querySelectorAll('[data-toggle]');
+const WEEK_KEY = 'rebuild-current-week';
+const WEEKS_HISTORY_KEY = 'rebuild-weeks-history';
+const HISTORY_KEY = 'rebuild-checkin-history';
+
+const CARDIO_BLOCKS = [
+  {prefix:'day1_run', label:'Monday Run'},
+  {prefix:'day2_bike', label:'Wednesday Bike'},
+  {prefix:'day4_bike', label:'Friday Bike'},
+  {prefix:'day3_run', label:'Sunday Long Run'}
+];
+
+const LIFT_FIELDS = [
+  {field:'day1_squat', label:'Back squat', increment:10},
+  {field:'day1_bench', label:'Bench press', increment:5},
+  {field:'day1_row', label:'Barbell row', increment:5},
+  {field:'day2_deadlift', label:'Deadlift', increment:10},
+  {field:'day2_ohp', label:'Overhead press', increment:5},
+  {field:'day2_pull', label:'Pull-ups / lat pulldown', increment:5},
+  {field:'day4_splitsquat', label:'DB split squat', increment:5},
+  {field:'day4_dbbench', label:'DB bench / floor press', increment:5},
+  {field:'day4_dbrow', label:'DB row', increment:5}
+];
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 1800);
+}
+
+function formatPace(minPerMile){
+  if(!minPerMile || !isFinite(minPerMile)) return '';
+  const mins = Math.floor(minPerMile);
+  const secs = Math.round((minPerMile - mins) * 60);
+  return `${mins}:${secs.toString().padStart(2,'0')}`;
+}
+
+let weekState = {};
+
+function updatePaceDisplays(){
+  CARDIO_BLOCKS.forEach(block=>{
+    const durEl = document.querySelector(`[data-field="${block.prefix}_duration"]`);
+    const distEl = document.querySelector(`[data-field="${block.prefix}_distance"]`);
+    const paceEl = document.getElementById('pace_'+block.prefix);
+    if(!durEl || !distEl || !paceEl) return;
+    const dur = parseFloat(durEl.value);
+    const dist = parseFloat(distEl.value);
+    if(dur && dist){
+      paceEl.textContent = `Pace: ${formatPace(dur/dist)} /mi`;
+    } else {
+      paceEl.textContent = '';
+    }
+  });
+}
+
+async function loadWeek(){
+  try{
+    const raw = localStorage.getItem(WEEK_KEY);
+    weekState = raw ? JSON.parse(raw) : {};
+  }catch(e){
+    weekState = {};
+  }
+  fields.forEach(f=>{
+    const key = f.dataset.field;
+    if(weekState[key]) f.value = weekState[key];
+  });
+  toggles.forEach(t=>{
+    const day = t.dataset.toggle;
+    const card = document.querySelector(`.day-card[data-day="${day}"]`);
+    if(weekState['done_'+day]){
+      t.classList.add('on');
+      card.classList.add('done');
+    }
+  });
+  updatePaceDisplays();
+}
+
+async function saveWeek(){
+  try{
+    localStorage.setItem(WEEK_KEY, JSON.stringify(weekState));
+  }catch(e){
+    console.error('Save failed', e);
+  }
+}
+
+async function loadWeeksHistory(){
+  try{
+    const raw = localStorage.getItem(WEEKS_HISTORY_KEY);
+    return raw ? JSON.parse(raw) : [];
+  }catch(e){
+    return [];
+  }
+}
+
+async function saveWeeksHistory(list){
+  try{
+    localStorage.setItem(WEEKS_HISTORY_KEY, JSON.stringify(list));
+  }catch(e){
+    console.error('Weeks history save failed', e);
+  }
+}
+
+fields.forEach(f=>{
+  f.addEventListener('change', ()=>{
+    weekState[f.dataset.field] = f.value;
+    saveWeek();
+    renderCoach();
+  });
+  if(f.dataset.field.endsWith('_duration') || f.dataset.field.endsWith('_distance')){
+    f.addEventListener('input', updatePaceDisplays);
+  }
+});
+
+toggles.forEach(t=>{
+  t.addEventListener('click', ()=>{
+    const day = t.dataset.toggle;
+    const card = document.querySelector(`.day-card[data-day="${day}"]`);
+    const isOn = t.classList.toggle('on');
+    card.classList.toggle('done', isOn);
+    weekState['done_'+day] = isOn;
+    saveWeek();
+  });
+});
+
+document.getElementById('resetWeekBtn').addEventListener('click', async ()=>{
+  if(!confirm('Archive this week and start fresh? Your check-in and coach history stay intact.')) return;
+  const hasData = Object.keys(weekState).some(k=>weekState[k]);
+  if(hasData){
+    const weeks = await loadWeeksHistory();
+    weeks.push({...weekState, date: new Date().toISOString()});
+    await saveWeeksHistory(weeks);
+  }
+  weekState = {};
+  fields.forEach(f=>f.value='');
+  toggles.forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.day-card').forEach(c=>c.classList.remove('done'));
+  await saveWeek();
+  updatePaceDisplays();
+  await renderCoach();
+  showToast('Week archived — ready to go');
+});
+
+async function loadHistory(){
+  try{
+    const raw = localStorage.getItem(HISTORY_KEY);
+    return raw ? JSON.parse(raw) : [];
+  }catch(e){
+    return [];
+  }
+}
+
+async function saveHistory(list){
+  try{
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(list));
+  }catch(e){
+    console.error('History save failed', e);
+  }
+}
+
+function parseTimeToSeconds(str){
+  if(!str) return null;
+  const parts = str.split(':').map(Number);
+  if(parts.length===2 && !parts.some(isNaN)) return parts[0]*60+parts[1];
+  const n = parseFloat(str);
+  return isNaN(n) ? null : n;
+}
+
+function deltaSpan(curr, prev, higherIsBetter){
+  if(prev===null || prev===undefined || curr===null || curr===undefined) return '';
+  const diff = curr - prev;
+  if(diff===0) return '';
+  const better = higherIsBetter ? diff>0 : diff<0;
+  const arrow = diff>0 ? '▲' : '▼';
+  return `<span class="delta ${better?'up':'down'}">${arrow} ${Math.abs(diff).toFixed(diff%1!==0?1:0)}</span>`;
+}
+
+async function renderHistory(){
+  const list = await loadHistory();
+  const container = document.getElementById('historyList');
+  if(list.length===0){
+    container.innerHTML = '<div class="empty-state">No check-ins logged yet. Your first monthly entry will show up here.</div>';
+    return;
+  }
+  const sorted = [...list].sort((a,b)=> new Date(b.date) - new Date(a.date));
+  container.innerHTML = sorted.map((entry, i)=>{
+    const prev = sorted[i+1];
+    const dateStr = new Date(entry.date).toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+    const fiveKcurr = parseTimeToSeconds(entry.fivek);
+    const fiveKprev = prev ? parseTimeToSeconds(prev.fivek) : null;
+    return `
+      <div class="history-entry">
+        <div class="history-top">
+          <div class="gauge-date">${dateStr}</div>
+        </div>
+        <div class="history-metrics">
+          <div class="metric"><span>5K</span><span class="val">${entry.fivek||'—'} ${prev?deltaSpan(fiveKcurr, fiveKprev, false):''}</span></div>
+          <div class="metric"><span>Squat 5RM</span><span class="val">${entry.squat||'—'} ${prev?deltaSpan(parseFloat(entry.squat), parseFloat(prev.squat), true):''}</span></div>
+          <div class="metric"><span>Bench 5RM</span><span class="val">${entry.bench||'—'} ${prev?deltaSpan(parseFloat(entry.bench), parseFloat(prev.bench), true):''}</span></div>
+          <div class="metric"><span>Push-ups/60s</span><span class="val">${entry.pushups||'—'} ${prev?deltaSpan(parseFloat(entry.pushups), parseFloat(prev.pushups), true):''}</span></div>
+          <div class="metric"><span>Resting HR</span><span class="val">${entry.hr||'—'} ${prev?deltaSpan(parseFloat(entry.hr), parseFloat(prev.hr), false):''}</span></div>
+        </div>
+        ${entry.notes ? `<div style="margin-top:10px;font-size:12px;color:var(--text-dim);border-top:1px dashed var(--line);padding-top:8px;">${entry.notes}</div>` : ''}
+      </div>
+    `;
+  }).join('');
+}
+
+document.getElementById('saveCheckin').addEventListener('click', async ()=>{
+  const entry = {
+    date: new Date().toISOString(),
+    fivek: document.getElementById('ci_5k').value,
+    squat: document.getElementById('ci_squat').value,
+    bench: document.getElementById('ci_bench').value,
+    pushups: document.getElementById('ci_pushups').value,
+    hr: document.getElementById('ci_hr').value,
+    notes: document.getElementById('ci_notes').value
+  };
+  if(!entry.fivek && !entry.squat && !entry.bench && !entry.pushups && !entry.hr){
+    showToast('Fill in at least one field first');
+    return;
+  }
+  const list = await loadHistory();
+  list.push(entry);
+  await saveHistory(list);
+  ['ci_5k','ci_squat','ci_bench','ci_pushups','ci_hr','ci_notes'].forEach(id=>document.getElementById(id).value='');
+  await renderHistory();
+  showToast('Check-in logged');
+});
+
+async function renderCoach(){
+  const weeks = await loadWeeksHistory();
+  const lastWeek = weeks.length ? weeks[weeks.length-1] : null;
+  let html = '';
+
+  CARDIO_BLOCKS.forEach(block=>{
+    const durNow = parseFloat(weekState[block.prefix+'_duration']);
+    const distNow = parseFloat(weekState[block.prefix+'_distance']);
+    const paceNow = (durNow && distNow) ? durNow/distNow : null;
+    let suggestion = '';
+    const durPrev = lastWeek ? parseFloat(lastWeek[block.prefix+'_duration']) : null;
+    const distPrev = lastWeek ? parseFloat(lastWeek[block.prefix+'_distance']) : null;
+    const pacePrev = (durPrev && distPrev) ? durPrev/distPrev : null;
+
+    if(paceNow && pacePrev){
+      const diff = pacePrev - paceNow;
+      if(diff > 0.15){
+        suggestion = `Pace improved, ${formatPace(pacePrev)} → ${formatPace(paceNow)}/mi. Hold here or add 5 min next time.`;
+      } else if(diff < -0.15){
+        suggestion = `Slower than last time (${formatPace(pacePrev)} → ${formatPace(paceNow)}/mi). Keep it easy — no need to chase pace right now.`;
+      } else {
+        suggestion = `Holding steady around ${formatPace(paceNow)}/mi. Consistency is what builds the base right now.`;
+      }
+    } else if(paceNow){
+      suggestion = `First pace logged for this session — ${formatPace(paceNow)}/mi. I'll compare it next time.`;
+    }
+
+    if(suggestion){
+      html += `<div class="coach-line"><span class="coach-label">${block.label}</span><span class="coach-text">${suggestion}</span></div>`;
+    }
+  });
+
+  LIFT_FIELDS.forEach(lift=>{
+    const now = parseFloat(weekState[lift.field]);
+    if(!now) return;
+    const prev = lastWeek ? parseFloat(lastWeek[lift.field]) : null;
+    let suggestion = '';
+    if(prev){
+      if(now > prev){
+        suggestion = `Up from ${prev} to ${now} lb — nice jump. Hold here next time before pushing again.`;
+      } else if(now === prev){
+        suggestion = `Same as last time (${now} lb). If the reps felt solid, try +${lift.increment} lb next session.`;
+      } else {
+        suggestion = `Down from ${prev} to ${now} lb — that's fine, focus on form and build back from here.`;
+      }
+    } else {
+      suggestion = `First weight logged (${now} lb). I'll track progress from here.`;
+    }
+    html += `<div class="coach-line"><span class="coach-label">${lift.label}</span><span class="coach-text">${suggestion}</span></div>`;
+  });
+
+  const container = document.getElementById('coachList');
+  container.innerHTML = html || '<div class="empty-state">Log a session or two and I\'ll start giving you week-over-week feedback here.</div>';
+}
+
+loadWeek();
+renderHistory();
+renderCoach();
+</script>
+</body>
+</html>
